@@ -1,0 +1,15 @@
+# Windows configuration
+build:windows --copt=/W3
+build:windows --host_copt=/W3
+build:windows --cxxopt=/std:c++17
+build:windows --host_cxxopt=/std:c++17
+build:windows --cpu=x64_windows
+build:windows --host_cpu=x64_windows
+build:windows --action_env=PATH
+
+# Linux configuration
+build:linux --cxxopt=-std=c++17
+build:linux --host_cxxopt=-std=c++17
+
+# Common settings
+build --compilation_mode=opt

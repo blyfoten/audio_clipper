@@ -1,0 +1,12 @@
+module(
+    name = "audio_clipper",
+    version = "1.0.0",
+)
+
+# Bazel version requirement
+bazel_dep(name = "platforms", version = "0.0.11")
+bazel_dep(name = "rules_cc", version = "0.1.1")
+
+# Use a module extension for all external dependencies
+audio_clipper_deps = use_extension("//:repositories.bzl", "audio_clipper_dependencies")
+use_repo(audio_clipper_deps, "imgui", "glfw", "dr_libs", "portaudio")
