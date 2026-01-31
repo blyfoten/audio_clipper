@@ -1,15 +1,6 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-
-# Virtual Environment
-.venv/
-venv/
-ENV/
-env/
+# Bazel
+bazel-*
+MODULE.bazel.lock
 
 # IDE
 .vscode/
@@ -17,16 +8,31 @@ env/
 *.swp
 *.swo
 *~
+.cursor/
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Temporary files
-temp_recording.wav
-*.tmp
+# Build artifacts
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
 
-# Distribution / packaging
-dist/
-build/
-*.egg-info/
+# ImGui
+imgui.ini
+
+# Temporary files
+*.tmp
+*.temp
+temp_*
+
+# vcpkg (if used locally)
+vcpkg_installed/
+vcpkg.json
+
+# FFmpeg temporary files
+*.temp.wav

@@ -1,85 +1,135 @@
 # Audio Clipper
 
-A simple and elegant GUI tool for recording, trimming, and adjusting audio clips. Save your recordings as MP3 or WAV files.
+A simple and elegant cross-platform GUI application for recording, trimming, and adjusting audio clips. Built with C++, ImGui, and Bazel.
+
+![Audio Clipper Screenshot](docs/screenshot.png)
 
 ## Features
 
-- 🎤 **Record Audio** - Record audio directly from your microphone
-- ✂️ **Trim Audio** - Cut audio clips to your desired start and end times
-- 🔊 **Volume Adjustment** - Adjust volume levels with a simple slider (-20dB to +20dB)
-- ▶️ **Playback** - Preview your audio before saving
-- 💾 **Export** - Save your audio as MP3 or WAV format
+- 🎤 **Record Audio** - Record directly from your microphone
+- ✂️ **Trim Audio** - Visual waveform editor with draggable markers
+- 🔊 **Volume Adjustment** - Adjust levels from -20dB to +20dB
+- ▶️ **Playback** - Preview audio with visual playhead
+- 💾 **Export** - Save as WAV or MP3 format
+- 📁 **Load Audio** - Import WAV files (MP3/FLAC via FFmpeg)
 
 ## Requirements
 
-- Python 3.7 or higher
-- FFmpeg (required for MP3 export)
+- **Bazel** (or Bazelisk) - Build system
+- **C++17 compiler** - MSVC (Windows) or GCC/Clang (Linux)
+- **OpenGL** - Usually available system-wide
+- **FFmpeg** (optional) - For MP3 export and loading non-WAV files
 
-### Installing FFmpeg
+All other dependencies (ImGui, GLFW, PortAudio, dr_libs) are automatically downloaded by Bazel.
+
+## Building
+
+### Windows
+
+1. Install [Visual Studio 2022 Build Tools](https://visualstudio.microsoft.com/downloads/) with C++ workload
+2. Install [Bazelisk](https://github.com/bazelbuild/bazelisk/releases) (recommended) or Bazel 7.0+
+
+```cmd
+bazelisk build --config=windows //:audio_clipper
+```
+
+Run the application:
+```cmd
+.\bazel-bin\audio_clipper.exe
+```
+
+### Linux
+
+1. Install build essentials and dependencies:
+```bash
+sudo apt-get install build-essential libasound2-dev libgl1-mesa-dev \
+    libx11-dev libxrandr-dev libxinerama-dev libxi-dev libxcursor-dev
+```
+
+2. Install Bazel or Bazelisk
+
+```bash
+bazel build //:audio_clipper
+```
+
+Run the application:
+```bash
+./bazel-bin/audio_clipper
+```
+
+## Installing FFmpeg (Optional)
+
+FFmpeg is required for MP3 export and importing non-WAV audio files.
 
 **Windows:**
-1. Download FFmpeg from https://ffmpeg.org/download.html
-2. Extract and add to your system PATH
-
-**macOS:**
-```bash
-brew install ffmpeg
-```
+1. Download from https://ffmpeg.org/download.html
+2. Extract and add the `bin` folder to your system PATH
 
 **Linux:**
 ```bash
 sudo apt-get install ffmpeg
 ```
 
-## Installation
-
-1. Install Python dependencies:
+**macOS:**
 ```bash
-pip install -r requirements.txt
+brew install ffmpeg
 ```
-
-**Note for Windows users:** If you encounter issues installing `pyaudio`, you may need to install it using:
-```bash
-pip install pipwin
-pipwin install pyaudio
-```
-
-Or download the appropriate wheel file from: https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio
 
 ## Usage
 
-Run the application:
-```bash
-python audio_clipper.py
+1. **Record Audio:**
+   - Click "Record" to start recording from your microphone
+   - Click "Stop" when finished
+
+2. **Load Audio:**
+   - Click "Load Audio" and enter the file path
+   - Supports WAV natively; MP3/FLAC/OGG require FFmpeg
+
+3. **Edit Audio:**
+   - Click on the waveform to place start/end markers
+   - Drag markers to adjust selection
+   - Use "Trim to Selection" to keep only selected region
+   - Use "Remove Selected" to delete selected region
+   - Use "Clear Markers" to reset
+
+4. **Adjust Volume:**
+   - Use the slider to set volume adjustment (-20dB to +20dB)
+   - Click "Apply" to apply the change
+
+5. **Playback:**
+   - Click "Play" to preview your audio
+   - The orange playhead shows current position
+   - Drag the playhead to seek
+
+6. **Save:**
+   - Click "WAV" or "MP3" to export
+   - Enter the desired file path
+
+## Project Structure
+
+```
+audio_clipper/
+├── src/
+│   ├── main.cpp           # Application entry point, GLFW/ImGui setup
+│   ├── audio_clipper.*    # Main UI and application logic
+│   ├── audio_recorder.*   # PortAudio recording
+│   ├── audio_player.*     # PortAudio playback
+│   └── audio_editor.*     # Audio processing (trim, volume, file I/O)
+├── third_party/           # Bazel BUILD files for dependencies
+├── BUILD                  # Main build file
+├── MODULE.bazel           # Bazel module configuration
+└── repositories.bzl       # External dependency definitions
 ```
 
-### How to Use
+## Dependencies
 
-1. **Record Audio:**
-   - Click the "● Record" button to start recording
-   - Click "Stop" when finished
-   - The duration will be displayed automatically
+| Library | Purpose | License |
+|---------|---------|---------|
+| [ImGui](https://github.com/ocornut/imgui) | Immediate mode GUI | MIT |
+| [GLFW](https://github.com/glfw/glfw) | Window/OpenGL context | Zlib |
+| [PortAudio](http://www.portaudio.com/) | Cross-platform audio I/O | MIT |
+| [dr_libs](https://github.com/mackron/dr_libs) | WAV file reading/writing | Public Domain |
 
-2. **Trim Audio:**
-   - Enter start and end times in seconds
-   - Click "Apply Trim" to trim the audio
+## License
 
-3. **Adjust Volume:**
-   - Use the volume slider to adjust the volume (-20dB to +20dB)
-   - Click "Apply Volume" to apply the change
-
-4. **Play Audio:**
-   - Click "▶ Play" to preview your audio
-   - Click "⏹ Stop" to stop playback
-
-5. **Save Audio:**
-   - Click "💾 Save as WAV" or "💾 Save as MP3"
-   - Choose a location and filename
-   - Your audio will be saved with all applied edits
-
-## Notes
-
-- All edits (trim and volume) are applied to a working copy of your audio
-- You can apply multiple edits before saving
-- MP3 export requires FFmpeg to be installed on your system
-
+MIT License - See [LICENSE](LICENSE) for details.
